@@ -4,6 +4,10 @@
 
 This project demonstrates how to send messages between two testnets, Henez testnet and Bera bartio, using Hyperlane. The following instructions will guide you through the setup and usage of the provided scripts.
 
+Henez Testnet [Henez Testnet](https://docs.henez.fi/resources/chain-information)
+
+Bera bArtio [Bera bArtio](https://bartio.faucet.berachain.com/)
+
 Developers can use this as a quickstart to start with [Hyperlane](https://github.com/hyperlane-xyz/hyperlane-monorepo).
 
 ## Installation and Testing

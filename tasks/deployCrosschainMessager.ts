@@ -1,12 +1,9 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
-import {
-  HyperlaneMessageReceiver__factory,
-  HyperlaneMessageSender__factory,
-} from "../typechain";
+import { CrosschainMessager__factory } from "../typechain";
 import { readFileSync, writeFileSync } from "fs";
 
-const taskName = "deployHyperlaneMessageSender";
+const taskName = "deployCrosschainMessager";
 const taskDescription = "";
 
 export default task(
@@ -22,23 +19,23 @@ export default task(
       readFileSync(`./deployments/${networkName}.json`, "utf-8")
     );
 
-    console.log(`Deploying HyperlaneMessageSender on network ${networkName}`);
+    console.log(`Deploying CrosschainMessager on network ${networkName}`);
 
-    const HyperlaneMessageSenderFactory = (await hre.ethers.getContractFactory(
-      "HyperlaneMessageSender"
-    )) as HyperlaneMessageSender__factory;
+    const CrosschainMessagerFactory = (await hre.ethers.getContractFactory(
+      "CrosschainMessager"
+    )) as CrosschainMessager__factory;
 
-    const hyperlaneMessageSender = await HyperlaneMessageSenderFactory.deploy(
+    const crosschainMessagerContract = await CrosschainMessagerFactory.deploy(
       deployedContracts.Mailbox
     );
 
-    await hyperlaneMessageSender.deployed();
+    await crosschainMessagerContract.deployed();
     console.log(
-      `Deployed HyperlaneMessageSender contract to ${hyperlaneMessageSender.address}`
+      `Deployed crosschainMessager contract to ${crosschainMessagerContract.address}`
     );
 
     // save the contract address to the deployments file
-    deployedContracts.HyperlaneMessageSender = hyperlaneMessageSender.address;
+    deployedContracts.CrosschainMessager = crosschainMessagerContract.address;
 
     writeFileSync(
       `./deployments/${networkName}.json`,
@@ -46,7 +43,7 @@ export default task(
     );
 
     console.log(
-      `Saved HyperlaneMessageSender contract address to deployments file`
+      `Saved CrosschainMessager contract address to deployments file`
     );
   }
 );

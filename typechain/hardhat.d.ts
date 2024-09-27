@@ -85,13 +85,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
-      name: "HyperlaneMessageReceiver",
+      name: "CrosschainMessager",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.HyperlaneMessageReceiver__factory>;
-    getContractFactory(
-      name: "HyperlaneMessageSender",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.HyperlaneMessageSender__factory>;
+    ): Promise<Contracts.CrosschainMessager__factory>;
 
     getContractAt(
       name: "AbstractPostDispatchHook",
@@ -184,15 +180,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Ownable>;
     getContractAt(
-      name: "HyperlaneMessageReceiver",
+      name: "CrosschainMessager",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.HyperlaneMessageReceiver>;
-    getContractAt(
-      name: "HyperlaneMessageSender",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.HyperlaneMessageSender>;
+    ): Promise<Contracts.CrosschainMessager>;
 
     // default types
     getContractFactory(

@@ -1,15 +1,12 @@
 import { task } from "hardhat/config";
 import { TaskArguments } from "hardhat/types";
-import {
-  HyperlaneMessageSender,
-  HyperlaneMessageSender__factory,
-} from "../typechain";
+import { CrosschainMessager, CrosschainMessager__factory } from "../typechain";
 import { readFileSync } from "fs";
 import { Contract } from "ethers";
 import {
   convertAddressToBytes32,
   getMessageIdFromTxReceipt,
-  waitForMessageIdIsDelivered,
+  waitForMessageIsDelivered,
 } from "./utils";
 
 const taskName = "sendMessage";
@@ -36,35 +33,39 @@ export default task(
     );
 
     if (
-      !sourceChainConfig.HyperlaneMessageSender ||
-      !targetChainConfig.HyperlaneMessageReceiver
+      !sourceChainConfig.CrosschainMessager ||
+      !targetChainConfig.CrosschainMessager
     ) {
       throw new Error(
-        "HyperlaneMessageSender on source chain or HyperlaneMessageReceiver on target chain not found"
+        "CrosschainMessager on source chain or CrosschainMessager on target chain not found"
       );
     }
 
-    const senderAddressOnSource = sourceChainConfig.HyperlaneMessageSender;
-    const senderSource = new Contract(
-      senderAddressOnSource,
-      HyperlaneMessageSender__factory.createInterface(),
+    const crosschainMessagerOnSource = sourceChainConfig.CrosschainMessager;
+    const ccMessagerOnSourceContract = new Contract(
+      crosschainMessagerOnSource,
+      CrosschainMessager__factory.createInterface(),
       hre.ethers.provider
-    ) as HyperlaneMessageSender;
-
-    const sentMessage = await senderSource
+    ) as CrosschainMessager;
+    const message = taskArgs.message;
+    const sentMessage = await ccMessagerOnSourceContract
       .connect(signer)
       .sendString(
         targetChainConfig.ChainId,
-        convertAddressToBytes32(targetChainConfig.HyperlaneMessageReceiver),
-        `Hello from ${networkName}`
+        convertAddressToBytes32(targetChainConfig.CrosschainMessager),
+        message
       );
     const sentMessageReceipt = await sentMessage.wait();
+
     console.log(
-      `Message sent from ${networkName} to ${targetChainName} w/ tx hash ${sentMessage.hash} on ${networkName}`
+      `📡 \"${message}\" message sent from ${networkName} to ${targetChainName}
+w/ tx hash ${sentMessage.hash} on ${networkName}`
     );
 
     // wait for delivery
     const messageId = getMessageIdFromTxReceipt(sentMessageReceipt);
-    await waitForMessageIdIsDelivered(messageId, targetChainConfig);
+    await waitForMessageIsDelivered(messageId, message, targetChainConfig);
   }
-).addParam("target", "target chain name");
+)
+  .addParam("target", "target chain name")
+  .addParam("message", "message");

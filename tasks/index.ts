@@ -1,3 +1,2 @@
-export * from "./deployHyperlaneMessageReceiver";
-export * from "./deployHyperlaneMessageSender";
+export * from "./deployCrosschainMessager";
 export * from "./sendMessage";

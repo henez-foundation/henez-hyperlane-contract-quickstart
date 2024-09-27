@@ -1,4 +1,5 @@
 import { BytesLike, ContractReceipt, ethers, providers } from "ethers";
+import { CrosschainMessager__factory } from "../typechain";
 
 export const convertAddressToBytes32 = (address: string): BytesLike => {
   return ethers.utils.hexZeroPad(address, 32);
@@ -32,16 +33,18 @@ export interface Log {
   logIndex: number;
 }
 
-export const waitForMessageIdIsDelivered = async (
+export const waitForMessageIsDelivered = async (
   messageId: string,
+  message: string,
   networkConfig: any
 ) => {
-  // ProcessId(bytes32 indexed messageId)=
-  const ProcessIdTopic =
-    "0x1cae38cdd3d3919489272725a5ae62a4f48b2989b0dae843d3c279fee18073a9";
+  // ReceivedMessage (indexed bytes, bytes32 ,uint32)
+  const ReceivedMessageTopic =
+    "0x56b03e35682025b62938a6ebd5b7728b519bf7a21c94f4e7fc6969b0c3f28083";
+  const listenedTopics = [ReceivedMessageTopic];
   const filter = {
-    address: networkConfig.Mailbox,
-    topics: [ProcessIdTopic],
+    address: networkConfig.CrosschainMessager,
+    topics: listenedTopics,
   };
 
   console.log(
@@ -53,19 +56,26 @@ export const waitForMessageIdIsDelivered = async (
   let isWaiting = true;
 
   provider.on(filter, async (log: Log) => {
-    if (log.topics[1] !== messageId) {
-      return;
+    switch (log.topics[0]) {
+      case ReceivedMessageTopic:
+        const parsedLog =
+          CrosschainMessager__factory.createInterface().parseLog(log);
+        // Decode the message
+        const encodedMessageBytes = log.topics[1];
+        console.log(encodedMessageBytes);
+        const decodedMessage = ethers.utils.toUtf8String(encodedMessageBytes);
+
+        console.log(`✅ Received message: ${decodedMessage}
+At tx hash ${log.transactionHash} on ${networkConfig.Name}`);
+        break;
     }
-    console.log(
-      `Received message at tx hash ${log.transactionHash} on ${networkConfig.Name}`
-    );
     isWaiting = false;
   });
 
   while (isWaiting) {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     if (isWaiting) {
-      console.log(`Continue waiting for ${messageId} to be delivered`);
+      console.log(`Continue waiting for message`);
     }
   }
 };

@@ -1,8 +1,7 @@
 {
-    "Name": "Bera Bartio",
-    "ChainId": 80084,
-    "RPC": "https://bartio.rpc.berachain.com/",
-    "Mailbox": "0xE87Cde6865813A5779425E30CDE29Fb24114724E",
-    "HyperlaneMessageSender": "0x3500298A6Cfb5f31D7e7bd4c7693c6AD13574210",
-    "HyperlaneMessageReceiver": "0x50D96240fc6C543cB5c974b36e9c294Aa27Fb550"
+  "Name": "Bera Bartio",
+  "ChainId": 80084,
+  "RPC": "https://bartio.rpc.berachain.com/",
+  "Mailbox": "0xE87Cde6865813A5779425E30CDE29Fb24114724E",
+  "CrosschainMessager": "0xa346243d5bd5Efd50D0D6a47be5E659B42F2203E"
 }

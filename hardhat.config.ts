@@ -24,8 +24,7 @@ const config = {
   },
   etherscan: {
     apiKey: {
-      fuji: process.env.EXPLORER_API_KEY,
-      berabartio: process.env.EXPLORER_API_KEY || "verifyContract",
+      berabartio: "verifyContract",
     },
     customChains: [
       {

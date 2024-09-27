@@ -19,8 +19,7 @@ export type { OwnableUpgradeable } from "./OwnableUpgradeable";
 export type { Initializable } from "./Initializable";
 export type { ContextUpgradeable } from "./ContextUpgradeable";
 export type { Ownable } from "./Ownable";
-export type { HyperlaneMessageReceiver } from "./HyperlaneMessageReceiver";
-export type { HyperlaneMessageSender } from "./HyperlaneMessageSender";
+export type { CrosschainMessager } from "./CrosschainMessager";
 
 export { AbstractPostDispatchHook__factory } from "./factories/AbstractPostDispatchHook__factory";
 export { StandardHookMetadata__factory } from "./factories/StandardHookMetadata__factory";
@@ -40,5 +39,4 @@ export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__fac
 export { Initializable__factory } from "./factories/Initializable__factory";
 export { ContextUpgradeable__factory } from "./factories/ContextUpgradeable__factory";
 export { Ownable__factory } from "./factories/Ownable__factory";
-export { HyperlaneMessageReceiver__factory } from "./factories/HyperlaneMessageReceiver__factory";
-export { HyperlaneMessageSender__factory } from "./factories/HyperlaneMessageSender__factory";
+export { CrosschainMessager__factory } from "./factories/CrosschainMessager__factory";

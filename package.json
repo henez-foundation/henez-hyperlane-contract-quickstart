@@ -9,7 +9,7 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "typechain": "npx hardhat typechain",
-    "hardhat:test": "npx hardhat test",
+    "test": "npx hardhat test",
     "forge:test": "forge test",
     "check-sizes": "npx hardhat compile && yarn hardhat size-contracts",
     "lint": "bun run lint:sol && bun run prettier:check",

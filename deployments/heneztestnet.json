@@ -3,5 +3,5 @@
   "ChainId": 91111,
   "RPC": "https://henez-testnet.rpc.caldera.xyz/http",
   "Mailbox": "0xCDf652e6B8ADe4D311a5a2E389E3c611343DdE9a",
-  "CrosschainMessager": "0xa346243d5bd5Efd50D0D6a47be5E659B42F2203E"
+  "CrosschainMessager": "0x51FdBd6ed1bd74c1aE8154a27f8626f69a6741bB"
 }

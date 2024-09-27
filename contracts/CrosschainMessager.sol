@@ -9,7 +9,7 @@ contract CrosschainMessager {
     IMailbox mailbox;
 
     event SentMessage(uint32 destinationDomain, bytes32 recipient, string message);
-    event ReceivedMessage(bytes indexed message, uint32 origin, bytes32 sender);
+    event ReceivedMessage(uint32 origin, bytes32 sender, bytes message);
 
     constructor(address _mailbox) {
         mailbox = IMailbox(_mailbox);
@@ -19,7 +19,7 @@ contract CrosschainMessager {
     function handle(uint32 _origin, bytes32 _sender, bytes calldata _message) external {
         lastSender = _sender;
         lastMessage = string(_message);
-        emit ReceivedMessage(_message, _origin, _sender);
+        emit ReceivedMessage(_origin, _sender, _message);
     }
 
     // This function sends a message from source chain to destination chain

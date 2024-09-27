@@ -3,5 +3,5 @@
   "ChainId": 80084,
   "RPC": "https://bartio.rpc.berachain.com/",
   "Mailbox": "0xE87Cde6865813A5779425E30CDE29Fb24114724E",
-  "CrosschainMessager": "0xa346243d5bd5Efd50D0D6a47be5E659B42F2203E"
+  "CrosschainMessager": "0x1d34dC069000D33D235eF63EDb224D91567283E7"
 }

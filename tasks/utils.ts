@@ -38,9 +38,9 @@ export const waitForMessageIsDelivered = async (
   message: string,
   networkConfig: any
 ) => {
-  // ReceivedMessage (indexed bytes, bytes32 ,uint32)
+  // $ cast sig-event "ReceivedMessage(uint32 origin, bytes32 sender, bytes message)"
   const ReceivedMessageTopic =
-    "0x56b03e35682025b62938a6ebd5b7728b519bf7a21c94f4e7fc6969b0c3f28083";
+    "0xc9f92737086b645b21611169d04fa8cc1b05a453ea6a9befbf3930d619e23bec";
   const listenedTopics = [ReceivedMessageTopic];
   const filter = {
     address: networkConfig.CrosschainMessager,
@@ -58,11 +58,14 @@ export const waitForMessageIsDelivered = async (
   provider.on(filter, async (log: Log) => {
     switch (log.topics[0]) {
       case ReceivedMessageTopic:
-        const parsedLog =
-          CrosschainMessager__factory.createInterface().parseLog(log);
+        const decodedEvent =
+          CrosschainMessager__factory.createInterface().decodeEventLog(
+            "ReceivedMessage",
+            log.data,
+            log.topics
+          );
         // Decode the message
-        const encodedMessageBytes = log.topics[1];
-        console.log(encodedMessageBytes);
+        const encodedMessageBytes = decodedEvent.message;
         const decodedMessage = ethers.utils.toUtf8String(encodedMessageBytes);
 
         console.log(`✅ Received message: ${decodedMessage}

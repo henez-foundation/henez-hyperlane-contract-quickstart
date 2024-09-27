@@ -53,7 +53,7 @@ interface CrosschainMessagerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "sendString", data: BytesLike): Result;
 
   events: {
-    "ReceivedMessage(bytes,uint32,bytes32)": EventFragment;
+    "ReceivedMessage(uint32,bytes32,bytes)": EventFragment;
     "SentMessage(uint32,bytes32,string)": EventFragment;
   };
 
@@ -62,7 +62,7 @@ interface CrosschainMessagerInterface extends ethers.utils.Interface {
 }
 
 export type ReceivedMessageEvent = TypedEvent<
-  [string, number, string] & { message: string; origin: number; sender: string }
+  [number, string, string] & { origin: number; sender: string; message: string }
 >;
 
 export type SentMessageEvent = TypedEvent<
@@ -175,22 +175,22 @@ export class CrosschainMessager extends BaseContract {
   };
 
   filters: {
-    "ReceivedMessage(bytes,uint32,bytes32)"(
-      message?: BytesLike | null,
+    "ReceivedMessage(uint32,bytes32,bytes)"(
       origin?: null,
-      sender?: null
+      sender?: null,
+      message?: null
     ): TypedEventFilter<
-      [string, number, string],
-      { message: string; origin: number; sender: string }
+      [number, string, string],
+      { origin: number; sender: string; message: string }
     >;
 
     ReceivedMessage(
-      message?: BytesLike | null,
       origin?: null,
-      sender?: null
+      sender?: null,
+      message?: null
     ): TypedEventFilter<
-      [string, number, string],
-      { message: string; origin: number; sender: string }
+      [number, string, string],
+      { origin: number; sender: string; message: string }
     >;
 
     "SentMessage(uint32,bytes32,string)"(

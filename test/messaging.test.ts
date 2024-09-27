@@ -40,7 +40,7 @@ describe("Hyperlane", function () {
       expect(dataReceived).to.eql(ethers.utils.hexlify(data));
     });
 
-    it("can send a message via HyperlaneMessageSender/Receiver", async function () {
+    it("can send a message via CrosschainMessager", async function () {
       const originDomain = 1;
       const destinationDomain = 2;
       const testString = "This is a test";
@@ -58,23 +58,23 @@ describe("Hyperlane", function () {
         destinationMailbox.address
       );
 
-      const senderFactory = await ethers.getContractFactory(
-        "HyperlaneMessageSender"
+      const crosschainMessagerFactory =
+        await ethers.getContractFactory("CrosschainMessager");
+      const crosschainMessager1 = await crosschainMessagerFactory.deploy(
+        originMailbox.address
       );
-      const sender = await senderFactory.deploy(originMailbox.address);
 
-      const receiverFactory = await ethers.getContractFactory(
-        "HyperlaneMessageReceiver"
+      const crosschainMessager2 = await crosschainMessagerFactory.deploy(
+        destinationMailbox.address
       );
-      const receiver = await receiverFactory.deploy(destinationMailbox.address);
 
-      await sender.sendString(
+      await crosschainMessager1.sendString(
         destinationDomain,
-        convertAddressToBytes32(receiver.address),
+        convertAddressToBytes32(crosschainMessager2.address),
         testString
       );
       await destinationMailbox.processNextInboundMessage();
-      expect(await receiver.lastMessage()).to.eql(testString);
+      expect(await crosschainMessager2.lastMessage()).to.eql(testString);
     });
   });
 });

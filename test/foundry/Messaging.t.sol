@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 import "@hyperlane-xyz/core/contracts/mock/MockMailbox.sol";
 import {TypeCasts} from "@hyperlane-xyz/core/contracts/libs/TypeCasts.sol";
 
-import "../../contracts/HyperlaneMessageSender.sol";
-import "../../contracts/HyperlaneMessageReceiver.sol";
+import "../../contracts/CrosschainMessager.sol";
+
 import {TestRecipient} from "@hyperlane-xyz/core/contracts/test/TestRecipient.sol";
 import {MockMailbox} from "@hyperlane-xyz/core/contracts/mock/MockMailbox.sol";
 
@@ -14,8 +14,8 @@ contract MessagingTest is Test {
     MockMailbox originMailbox;
     MockMailbox destinationMailbox;
 
-    HyperlaneMessageSender sender;
-    HyperlaneMessageReceiver receiver;
+    CrosschainMessager ccMessager1;
+    CrosschainMessager ccMessager2;
 
     uint32 originDomain = 1;
     uint32 destinationDomain = 2;
@@ -24,13 +24,13 @@ contract MessagingTest is Test {
         originMailbox = new MockMailbox(originDomain);
         destinationMailbox = new MockMailbox(destinationDomain);
         originMailbox.addRemoteMailbox(destinationDomain, destinationMailbox);
-        sender = new HyperlaneMessageSender(address(originMailbox));
-        receiver = new HyperlaneMessageReceiver(address(destinationMailbox));
+        ccMessager1 = new CrosschainMessager(address(originMailbox));
+        ccMessager2 = new CrosschainMessager(address(destinationMailbox));
     }
 
     function testSendMessage(string calldata _message) public {
-        sender.sendString(destinationDomain, TypeCasts.addressToBytes32(address(receiver)), _message);
+        ccMessager1.sendString(destinationDomain, TypeCasts.addressToBytes32(address(ccMessager2)), _message);
         destinationMailbox.processNextInboundMessage();
-        assertEq(receiver.lastMessage(), _message);
+        assertEq(ccMessager2.lastMessage(), _message);
     }
 }
